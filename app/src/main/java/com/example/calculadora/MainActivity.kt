@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
     //0->nada, 1->suma, 2->resta, 3->multi, 4->division
     // decicion == 1 -> no hay operacion      decision == 2 -> si hay operacion  || poder concatenar strings y comvertir el numero1 en un string
     var acumulador: String = ""
-    var decision: Int = 0
+    //var decision: Int = 0
     var oper: Int = 0
     var numero1: Double = 0.0
     lateinit var tv_num1: TextView
@@ -107,28 +107,48 @@ class MainActivity : AppCompatActivity() {
     fun clicOperacion(view: View){
         //numero1 = tv_num2.text.toString().toDouble()
         var num1_text: String = tv_num1.text.toString()
+        var vacio: String = tv_num2.text.toString()
+        var resp: Double = 0.0
+        var numero2: Double
         //tv_num2.setText("")
+
+        if (vacio == ""){
+             numero2 = 0.0
+        }else{
+            numero2= tv_num2.text.toString().toDouble()
+        }
 
         when(view.id) {
             R.id.sumaBoton -> {
                 tv_num1.setText(num1_text + "+")
-                numero1 = acumulador.toString().toDouble()
+                numero1 = acumulador.toDouble()
+                resp = numero1 + numero2
                 acumulador = ""
+                tv_num2.setText(resp.toString())
                 //oper = 1
             }
             R.id.restaBoton -> {
                 tv_num1.setText(num1_text + "-")
+                numero1 = acumulador.toString().toDouble()
+                resp = numero1 - numero2
                 acumulador = ""
+                tv_num2.setText(resp.toString())
                 //oper = 2
             }
             R.id.multiBoton -> {
                 tv_num1.setText(num1_text + "*")
+                numero1 = acumulador.toString().toDouble()
+                resp = numero1 * numero2
                 acumulador = ""
+                tv_num2.setText(resp.toString())
                 //oper = 3
             }
             R.id.diviBoton -> {
                 tv_num1.setText(num1_text + "/")
+                numero1 = acumulador.toString().toDouble()
+                resp = numero1 / numero2
                 acumulador = ""
+                tv_num2.setText(resp.toString())
                 //oper = 4
             }
         }
