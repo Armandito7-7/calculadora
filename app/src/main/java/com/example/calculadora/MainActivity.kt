@@ -1,7 +1,9 @@
 package com.example.calculadora
 
+import android.icu.text.UnicodeSet.EMPTY
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -29,22 +31,20 @@ class MainActivity : AppCompatActivity() {
             var numero2: Double = tv_num2.text.toString().toDouble()
             var resp: Double = 0.0
 
-            when(oper){
-                1 -> resp = numero1 + numero2
-                2 -> resp = numero1 - numero2
-                3 -> resp = numero1 * numero2
-                4 -> resp = numero1 / numero2
-            }
-
-            tv_num2.setText(resp.toString())
-            tv_num1.setText("")
+            numero1 = acumulador.toDouble()
+            resp = identificaroperacion(numero2)
+            acumulador = ""
+            tv_num1.setText(resp.toString())
+            tv_num2.setText("")
         }
 
         borrarBoton.setOnClickListener{
+
             tv_num1.setText("")
             tv_num2.setText("")
             numero1 = 0.0
-            oper = 0
+            oper =  0
+            acumulador = ""
         }
 
     }
@@ -120,37 +120,56 @@ class MainActivity : AppCompatActivity() {
 
         when(view.id) {
             R.id.sumaBoton -> {
+
                 tv_num1.setText(num1_text + "+")
                 numero1 = acumulador.toDouble()
-                resp = numero1 + numero2
+                resp = identificaroperacion(numero2)
                 acumulador = ""
                 tv_num2.setText(resp.toString())
-                //oper = 1
+                oper = 1
+                //
+                Log.i("variable resp:"," "+resp)
+                Log.i("variable numero 2:"," "+numero2)
             }
             R.id.restaBoton -> {
                 tv_num1.setText(num1_text + "-")
                 numero1 = acumulador.toString().toDouble()
-                resp = numero1 - numero2
+                resp = identificaroperacion(numero2)
                 acumulador = ""
                 tv_num2.setText(resp.toString())
-                //oper = 2
+                oper = 2
+                Log.i("variable resp:"," "+resp)
+                Log.i("variable numero 2:"," "+numero2)
             }
             R.id.multiBoton -> {
                 tv_num1.setText(num1_text + "*")
                 numero1 = acumulador.toString().toDouble()
-                resp = numero1 * numero2
+                resp = identificaroperacion(numero2)
                 acumulador = ""
                 tv_num2.setText(resp.toString())
-                //oper = 3
+                oper = 3
             }
             R.id.diviBoton -> {
                 tv_num1.setText(num1_text + "/")
                 numero1 = acumulador.toString().toDouble()
-                resp = numero1 / numero2
+                resp = identificaroperacion(numero2)
                 acumulador = ""
                 tv_num2.setText(resp.toString())
-                //oper = 4
+                oper = 4
             }
         }
     }
+
+    fun identificaroperacion(numero2: Double): Double{
+        var resp: Double = 0.0
+        when(oper){
+            0 -> resp = numero1
+            1 -> resp = numero1 + numero2
+            2 -> resp = numero2 - numero1
+            3 -> resp = numero1 * numero2
+            4 -> resp = numero2 / numero1
+        }
+       return resp
+    }
+
 }
