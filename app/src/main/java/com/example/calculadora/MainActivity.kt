@@ -1,5 +1,7 @@
 package com.example.calculadora
 
+import android.app.AlertDialog
+import android.content.Context
 import android.icu.text.UnicodeSet.EMPTY
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,16 +9,18 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     //0->nada, 1->suma, 2->resta, 3->multi, 4->division
-    // decicion == 1 -> no hay operacion      decision == 2 -> si hay operacion  || poder concatenar strings y comvertir el numero1 en un string
-    var acumulador: String = ""
-    //var decision: Int = 0
-    var oper: Int = 0
-    var numero1: Double = 0.0
-    lateinit var tv_num1: TextView
+    var acumulador: String = "" //variable que se almacena la cifra de cada operacion
+    var oper: Int = 0 // variable que define la operacion que se va a realizar
+    var numero1: Double = 0.0 // el primer numero que se digita
+    lateinit var tv_num1: TextView //el primer 
     lateinit var tv_num2: TextView
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,16 +30,29 @@ class MainActivity : AppCompatActivity() {
         tv_num2 = findViewById(R.id.tv_num2)
         val borrarBoton: Button = findViewById(R.id.borrarBoton)
         val igualBoton: Button = findViewById(R.id.igualBoton)
+        
+        val addContactDialog = AlertDialog.Builder(this)
+            .setTitle("Error 2")
+            .setMessage("No se puede mostrar el resultado ya que no ha reliazado ninguna operacion")
+            .setIcon(R.drawable.tachita_foreground)
+            .setPositiveButton("Yes"){ _, _ ->
+                Toast.makeText(this,"ingrese la operacion a realizar", Toast.LENGTH_SHORT).show()
+            }.create()
 
         igualBoton.setOnClickListener{
-            var numero2: Double = tv_num2.text.toString().toDouble()
-            var resp: Double = 0.0
+            if(acumulador==""){
+                addContactDialog.show()
+            }else {
+                var numero2: Double = tv_num2.text.toString().toDouble()
+                var resp: Double = 0.0
 
-            numero1 = acumulador.toDouble()
-            resp = identificaroperacion(numero2)
-            acumulador = ""
-            tv_num1.setText(resp.toString())
-            tv_num2.setText("")
+
+                numero1 = acumulador.toDouble()
+                resp = identificaroperacion(numero2)
+                acumulador = ""
+                tv_num1.setText(resp.toString())
+                tv_num2.setText("")
+            }
         }
 
         borrarBoton.setOnClickListener{
@@ -105,6 +122,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun clicOperacion(view: View){
+        //mensaje flotante
+        val addContactDialog = AlertDialog.Builder(this)
+            .setTitle("Error 1")
+            .setMessage("No se puede realizar esa operación,no ingresó el numero antes de la operación")
+            .setIcon(R.drawable.tachita_foreground)
+            .setPositiveButton("OK"){ _, _ ->
+                Toast.makeText(this,"ingresa un numero e intente nuevamente", Toast.LENGTH_SHORT).show()
+            }.create()
         //numero1 = tv_num2.text.toString().toDouble()
         var num1_text: String = tv_num1.text.toString()
         var vacio: String = tv_num2.text.toString()
@@ -120,42 +145,57 @@ class MainActivity : AppCompatActivity() {
 
         when(view.id) {
             R.id.sumaBoton -> {
-
-                tv_num1.setText(num1_text + "+")
-                numero1 = acumulador.toDouble()
-                resp = identificaroperacion(numero2)
-                acumulador = ""
-                tv_num2.setText(resp.toString())
-                oper = 1
-                //
-                Log.i("variable resp:"," "+resp)
-                Log.i("variable numero 2:"," "+numero2)
+                if (acumulador==""){
+                    addContactDialog.show()
+                }else {
+                    tv_num1.setText(num1_text + "+")
+                    numero1 = acumulador.toDouble()
+                    resp = identificaroperacion(numero2)
+                    acumulador = ""
+                    tv_num2.setText(resp.toString())
+                    oper = 1
+                    //
+                    Log.i("variable resp:", " " + resp)
+                    Log.i("variable numero 2:", " " + numero2)
+                }
             }
             R.id.restaBoton -> {
-                tv_num1.setText(num1_text + "-")
-                numero1 = acumulador.toString().toDouble()
-                resp = identificaroperacion(numero2)
-                acumulador = ""
-                tv_num2.setText(resp.toString())
-                oper = 2
-                Log.i("variable resp:"," "+resp)
-                Log.i("variable numero 2:"," "+numero2)
+                if (acumulador==""){
+                    addContactDialog.show()
+                }else {
+                    tv_num1.setText(num1_text + "-")
+                    numero1 = acumulador.toString().toDouble()
+                    resp = identificaroperacion(numero2)
+                    acumulador = ""
+                    tv_num2.setText(resp.toString())
+                    oper = 2
+                    Log.i("variable resp:", " " + resp)
+                    Log.i("variable numero 2:", " " + numero2)
+                }
             }
             R.id.multiBoton -> {
-                tv_num1.setText(num1_text + "*")
-                numero1 = acumulador.toString().toDouble()
-                resp = identificaroperacion(numero2)
-                acumulador = ""
-                tv_num2.setText(resp.toString())
-                oper = 3
+                if (acumulador==""){
+                    addContactDialog.show()
+                }else {
+                    tv_num1.setText(num1_text + "*")
+                    numero1 = acumulador.toString().toDouble()
+                    resp = identificaroperacion(numero2)
+                    acumulador = ""
+                    tv_num2.setText(resp.toString())
+                    oper = 3
+                }
             }
             R.id.diviBoton -> {
-                tv_num1.setText(num1_text + "/")
-                numero1 = acumulador.toString().toDouble()
-                resp = identificaroperacion(numero2)
-                acumulador = ""
-                tv_num2.setText(resp.toString())
-                oper = 4
+                if (acumulador==""){
+                    addContactDialog.show()
+                }else {
+                    tv_num1.setText(num1_text + "/")
+                    numero1 = acumulador.toString().toDouble()
+                    resp = identificaroperacion(numero2)
+                    acumulador = ""
+                    tv_num2.setText(resp.toString())
+                    oper = 4
+                }
             }
         }
     }
@@ -173,3 +213,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
+
+
+
